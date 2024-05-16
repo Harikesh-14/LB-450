@@ -2,19 +2,57 @@
 #include<vector>
 using namespace std;
 
-int inversion_count(vector<int> &vec){
-  int n = vec.size();
+int merge(vector<int> &vec, vector<int> &temp, int left, int mid, int right){
   int inversion_count = 0;
 
-  for(int i=0; i<n; i++){
-    for(int j=i+1; j<n; j++){
-      if(vec[i] > vec[j]){
-        inversion_count++;
-      }
+  int i=left;
+  int j=mid;
+  int k=left;
+
+  while((i<=mid-1) && (j<=right)){
+    if(vec[i] <= vec[j]){
+      temp[k++] = vec[i++];
+    } else {
+      temp[k++] = vec[j++];
+      inversion_count += (mid - i);
     }
   }
 
+  while(i<=mid-1){
+    temp[k++] = vec[i++];
+  }
+
+  while(j<=right){
+    temp[k++] = vec[j++];
+  }
+
+  for(i=left; i<=right; i++){
+    vec[i] = temp[i];
+  }
+
   return inversion_count;
+}
+
+int mergeSort(vector<int> &vec, vector<int> &temp, int left, int right){
+  int inversion_count = 0;
+
+  if(left < right){
+    int mid = (left + right)/2;
+
+    inversion_count += mergeSort(vec, temp, left, mid);
+    inversion_count += mergeSort(vec, temp, mid+1, right);
+
+    inversion_count += merge(vec, temp, left, mid+1, right);
+  }
+
+  return inversion_count;
+}
+
+int inversion_count(vector<int> &vec){
+  int n = vec.size();
+  vector<int> temp(n);
+
+  return mergeSort(vec, temp, 0, n-1);
 }
 
 int main() {
