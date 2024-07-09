@@ -36,6 +36,23 @@ int countWays(int stairs){
   return dp[stairs];
 }
 
+// space optimized approach
+int countWaysOptimized(int stairs){
+  if(stairs == 0 || stairs == 1){
+    return 1;
+  }
+
+  int a = 1, b = 1, c;
+
+  for(int i=2; i<=stairs; i++){
+    c = (a + b) % MOD;
+    a = b;
+    b = c;
+  }
+
+  return c;
+}
+
 int main() {
   int n;
   cin>>n;
