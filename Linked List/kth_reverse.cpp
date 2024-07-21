@@ -42,10 +42,22 @@ void printList(Node* head){
 }
 
 Node* kth_reverse(Node* &head, int k) {
+  if (!head || k == 1) return head;
+
   Node* curr = head;
+  int count = 0;
+
+  while(curr && count < k){
+      curr = curr->next;
+      count++;
+  }
+
+  if (count < k) return head;
+
+  curr = head;
   Node* next = nullptr;
   Node* prev = nullptr;
-  int count = 0;
+  count = 0;
 
   while(count != k){
     next = curr->next;
